@@ -66,7 +66,7 @@ jobs:
             BUILD_DATE=${{ env.BUILD_DATE }}
           context: ${{ matrix.drawio }}/
           file: ${{ matrix.drawio }}/Dockerfile
-          platforms: linux/amd64, linux/arm64, linux/aarch64
+          platforms: linux/amd64, linux/aarch64
           load: True
 
       - name: Push image
@@ -76,5 +76,5 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ env.VERSION }}-${{ matrix.drawio }},${{ env.IMAGE }}:${{ matrix.drawio }}
           context: ${{ matrix.drawio }}/
           file: ${{ matrix.drawio }}/Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/aarch64
           push: True
