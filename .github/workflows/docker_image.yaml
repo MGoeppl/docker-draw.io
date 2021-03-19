@@ -55,7 +55,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
-      - name: Build image (AMD64)
+      - name: Build image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -66,27 +66,8 @@ jobs:
             BUILD_DATE=${{ env.BUILD_DATE }}
           context: ${{ matrix.drawio }}/
           file: ${{ matrix.drawio }}/Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64, linux/aarch64
           load: True
-      
-      - name: Build image (ARM64)
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          tags: ${{ env.IMAGE }}:${{ env.VERSION }}-${{ matrix.drawio }},${{ env.IMAGE }}:${{ matrix.drawio }}
-          build-args:
-            VCS_REF=${{ github.ref }}
-            VERSION=${{ env.VERSION }}
-            BUILD_DATE=${{ env.BUILD_DATE }}
-          context: ${{ matrix.drawio }}/
-          file: ${{ matrix.drawio }}/Dockerfile
-          platforms: linux/arm64
-          load: True
-      - name: Test webapp
-        run: |
-          docker run --name 'drawio' -d ${{ env.IMAGE }}:${{ env.VERSION }}-${{ matrix.drawio }}
-          sleep 10
-          docker exec drawio /bin/bash -c "curl -i http://localhost:8080"
 
       - name: Push image
         id: docker_push
